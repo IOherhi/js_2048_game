@@ -9,7 +9,7 @@ const arrayTr = Array.from(tbody.children);
 /* ===================================================== */
 
 class Game {
-  constructor() {
+  constructor(ss) {
     this.board = this.createEmptyBoard();
     this.score = 0;
     this.status = 'playing'; // або 'finished' (гра завершена)
@@ -266,6 +266,7 @@ class Game {
   moveUp() {
     if (!this.canContinueGame()) {
       this.getMessage();
+      this.getStatus = 'playing';
 
       return;
     }
@@ -462,6 +463,7 @@ class Game {
   moveRight() {
     if (!this.canContinueGame()) {
       this.getMessage();
+      this.getStatus = 'playing';
 
       return;
     }
