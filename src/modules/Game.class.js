@@ -16,6 +16,7 @@ class Game {
   }
 
   start() {
+    this.deleteMessage();
     this.clearBoard();
     this.restart();
     this.addSCore();
@@ -23,6 +24,17 @@ class Game {
     this.spawnTile();
     this.spawnTile();
     this.updateBoardFromDOM();
+  }
+
+  deleteMessage() {
+    const message = document.querySelector('.message-container');
+    const button = document.querySelector('.button');
+
+    if (button.textContent === 'Restart') {
+      message.style.opacity = 1;
+    } else {
+      message.style.opacity = 0;
+    }
   }
 
   spawnTile() {
@@ -87,7 +99,7 @@ class Game {
     this.score = 0;
     this.status = 'playing';
 
-    const button = document.querySelector('button');
+    const button = document.querySelector('.button');
     const message = document.querySelector('.message-container');
 
     message.children[2].textContent = 'Press "Start" to begin game. Good luck!';
@@ -213,6 +225,7 @@ class Game {
       rows[i].push(row[3]);
     });
 
+    // Перевірка на склеювання комірок рядків.
     const rowsMerge = (row) => {
       const newRow = row.filter((item) => item !== 0);
       const newRowLength = newRow.length;
@@ -233,11 +246,14 @@ class Game {
       }
     }
 
+    // Перевірка на порожні комірки.
     for (const row of this.board) {
       if (row.includes(0)) {
         return true;
       }
     }
+
+    // Перевірка на рух.
 
     return false;
   }
@@ -251,6 +267,8 @@ class Game {
   getMessage() {
     const messageConT = document.querySelector('.message-container');
 
+    messageConT.style.display = 'block';
+    messageConT.style.opacity = 1;
     messageConT.children[2].textContent = messageConT.children[0].textContent;
     messageConT.children[2].classList.add('message-lose');
   }
@@ -258,6 +276,9 @@ class Game {
   getMessageWin() {
     const messageConT = document.querySelector('.message-container');
     const messageWin = document.querySelector('.message-win');
+
+    messageConT.style.display = 'block';
+    messageConT.style.opacity = 1;
 
     messageConT.children[2].textContent = messageWin.textContent;
     messageConT.children[2].classList.add('message-win');
@@ -291,24 +312,21 @@ class Game {
     });
 
     const mergeColumn = (column) => {
-      // Спочатку фільтруємо нулі
       const merged = column.filter((cell) => cell !== 0);
       const result = [];
       let i = 0;
 
-      // Злиття плиток
       while (i < merged.length) {
         if (i < merged.length - 1 && merged[i] === merged[i + 1]) {
-          result.push(merged[i] * 2); // Подвоїти плитки
-          this.score += merged[i] * 2; // Додаємо до рахунку
-          i += 2; // Пропускаємо наступну плитку після злиття
+          result.push(merged[i] * 2);
+          this.score += merged[i] * 2;
+          i += 2;
         } else {
-          result.push(merged[i]); // Якщо плитки не однакові
+          result.push(merged[i]);
           i++;
         }
       }
 
-      // Переміщуємо плитки вгору, щоб не було проміжків
       while (result.length < 4) {
         result.push(0);
       }
@@ -316,11 +334,22 @@ class Game {
       return result;
     };
 
-    // Обробляємо кожен стовпець
     const newColumn1 = mergeColumn(column1);
     const newColumn2 = mergeColumn(column2);
     const newColumn3 = mergeColumn(column3);
     const newColumn4 = mergeColumn(column4);
+
+    const newState = [column1, column2, column3, column4];
+
+    let canMove = false;
+
+    for (let i = 0; i <= 3; i++) {
+      for (let n = 0; n <= 3; n++) {
+        if (newState[i][n] !== this.board[i][n]) {
+          canMove = true;
+        }
+      }
+    }
 
     // Очищаємо дошку
     this.clearBoard();
@@ -353,17 +382,19 @@ class Game {
       }
     }
 
+    if (canMove) {
+      this.spawnTile();
+    }
+
     this.addColor();
-    this.spawnTile();
     this.addSCore();
 
     if (this.score === 2048) {
       this.getMessageWin();
     }
 
-    // Оновлюємо дошку
     this.updateBoardFromDOM();
-  } // Рух в гору.
+  }
 
   moveDown() {
     const button = document.querySelector('button');
