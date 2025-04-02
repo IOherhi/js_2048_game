@@ -294,16 +294,18 @@ class Game {
 
     const button = document.querySelector('button');
 
-    button.style.fontSize = 18 + 'px';
+    button.style.fontSize = '18px';
+
     button.textContent = 'Restart';
     button.classList.add('restart');
+
+    const oldBoard = JSON.stringify(this.board);
 
     const column1 = [];
     const column2 = [];
     const column3 = [];
     const column4 = [];
 
-    // Перетворюємо стовпці в масиви
     this.board.forEach((row) => {
       column1.push(row[0]);
       column2.push(row[1]);
@@ -339,22 +341,15 @@ class Game {
     const newColumn3 = mergeColumn(column3);
     const newColumn4 = mergeColumn(column4);
 
-    const newState = [column1, column2, column3, column4];
+    this.board = [
+      [newColumn1[0], newColumn2[0], newColumn3[0], newColumn4[0]],
+      [newColumn1[1], newColumn2[1], newColumn3[1], newColumn4[1]],
+      [newColumn1[2], newColumn2[2], newColumn3[2], newColumn4[2]],
+      [newColumn1[3], newColumn2[3], newColumn3[3], newColumn4[3]],
+    ];
 
-    let canMove = false;
-
-    for (let i = 0; i <= 3; i++) {
-      for (let n = 0; n <= 3; n++) {
-        if (newState[i][n] !== this.board[i][n]) {
-          canMove = true;
-        }
-      }
-    }
-
-    // Очищаємо дошку
     this.clearBoard();
 
-    // Оновлення значень на сторінці
     const arrayFromTr = Array.from(tbody.children);
 
     for (let i = 0; i < arrayFromTr.length; i++) {
@@ -382,7 +377,9 @@ class Game {
       }
     }
 
-    if (canMove) {
+    const newBoard = JSON.stringify(this.board);
+
+    if (oldBoard !== newBoard) {
       this.spawnTile();
     }
 
@@ -394,7 +391,7 @@ class Game {
     }
 
     this.updateBoardFromDOM();
-  }
+  } // Рух в верх.
 
   moveDown() {
     const button = document.querySelector('button');
@@ -442,11 +439,20 @@ class Game {
       return result;
     };
 
+    const oldBoard = JSON.stringify(this.board);
+
     // Обробляємо кожен стовпець
     const newColumn1 = mergeColumn(column1);
     const newColumn2 = mergeColumn(column2);
     const newColumn3 = mergeColumn(column3);
     const newColumn4 = mergeColumn(column4);
+
+    this.board = [
+      [newColumn1[0], newColumn2[0], newColumn3[0], newColumn4[0]],
+      [newColumn1[1], newColumn2[1], newColumn3[1], newColumn4[1]],
+      [newColumn1[2], newColumn2[2], newColumn3[2], newColumn4[2]],
+      [newColumn1[3], newColumn2[3], newColumn3[3], newColumn4[3]],
+    ];
 
     // Очищаємо дошку
     this.clearBoard();
@@ -479,8 +485,13 @@ class Game {
       }
     }
 
+    const newBoard = JSON.stringify(this.board);
+
+    if (oldBoard !== newBoard) {
+      this.spawnTile();
+    }
+
     this.addColor();
-    this.spawnTile();
     this.addSCore();
 
     if (this.score === 2048) {
@@ -530,9 +541,18 @@ class Game {
       return result;
     };
 
+    const oldBoard = JSON.stringify(this.board);
+
     // Обробляємо кожен рядок
 
     const arraRow = this.board.map((row) => mergeColumn(row));
+
+    this.board = [
+      [arraRow[0][0], arraRow[0][1], arraRow[0][2], arraRow[0][3]],
+      [arraRow[1][0], arraRow[1][1], arraRow[1][2], arraRow[1][3]],
+      [arraRow[2][0], arraRow[2][1], arraRow[2][2], arraRow[2][3]],
+      [arraRow[3][0], arraRow[3][1], arraRow[3][2], arraRow[3][3]],
+    ];
 
     // Очищаємо дошку
     this.clearBoard();
@@ -565,8 +585,13 @@ class Game {
       }
     }
 
+    const newBoard = JSON.stringify(this.board);
+
+    if (oldBoard !== newBoard) {
+      this.spawnTile();
+    }
+
     this.addColor();
-    this.spawnTile();
     this.addSCore();
 
     if (this.score === 2048) {
@@ -609,9 +634,18 @@ class Game {
       return result;
     };
 
+    const oldBoard = JSON.stringify(this.board);
+
     // Обробляємо кожен рядок
 
     const arraRow = this.board.map((row) => mergeColumn(row));
+
+    this.board = [
+      [arraRow[0][0], arraRow[0][1], arraRow[0][2], arraRow[0][3]],
+      [arraRow[1][0], arraRow[1][1], arraRow[1][2], arraRow[1][3]],
+      [arraRow[2][0], arraRow[2][1], arraRow[2][2], arraRow[2][3]],
+      [arraRow[3][0], arraRow[3][1], arraRow[3][2], arraRow[3][3]],
+    ];
 
     // Очищаємо дошку
     this.clearBoard();
@@ -644,8 +678,13 @@ class Game {
       }
     }
 
+    const newBoard = JSON.stringify(this.board);
+
+    if (oldBoard !== newBoard) {
+      this.spawnTile();
+    }
+
     this.addColor();
-    this.spawnTile();
     this.addSCore();
 
     if (this.score === 2048) {
