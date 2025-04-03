@@ -28,13 +28,12 @@ class Game {
 
   deleteMessage() {
     const message = document.querySelector('.message-container');
-    const button = document.querySelector('.button');
+    const messageStart = message.children[2];
 
-    if (button.textContent === 'Restart') {
-      message.style.opacity = 1;
-    } else {
-      message.style.opacity = 0;
-    }
+    messageStart.classList.remove('message-lose');
+    messageStart.classList.remove('message-win');
+
+    messageStart.textContent = '';
   }
 
   spawnTile() {
@@ -100,11 +99,6 @@ class Game {
     this.status = 'playing';
 
     const button = document.querySelector('.button');
-    const message = document.querySelector('.message-container');
-
-    message.children[2].textContent = 'Press "Start" to begin game. Good luck!';
-    message.children[2].className = '';
-    message.children[2].classList.add('message');
 
     button.textContent = 'Start';
     button.classList.remove('restart');
@@ -267,8 +261,6 @@ class Game {
   getMessage() {
     const messageConT = document.querySelector('.message-container');
 
-    messageConT.style.display = 'block';
-    messageConT.style.opacity = 1;
     messageConT.children[2].textContent = messageConT.children[0].textContent;
     messageConT.children[2].classList.add('message-lose');
   }
@@ -277,9 +269,6 @@ class Game {
     const messageConT = document.querySelector('.message-container');
     const messageWin = document.querySelector('.message-win');
 
-    messageConT.style.display = 'block';
-    messageConT.style.opacity = 1;
-
     messageConT.children[2].textContent = messageWin.textContent;
     messageConT.children[2].classList.add('message-win');
   }
@@ -287,7 +276,7 @@ class Game {
   moveUp() {
     if (!this.canContinueGame()) {
       this.getMessage();
-      this.getStatus = 'playing';
+      this.status = 'finished';
 
       return;
     }
@@ -295,7 +284,6 @@ class Game {
     const button = document.querySelector('button');
 
     button.style.fontSize = '18px';
-
     button.textContent = 'Restart';
     button.classList.add('restart');
 
@@ -386,7 +374,9 @@ class Game {
     this.addColor();
     this.addSCore();
 
-    if (this.score === 2048) {
+    const has2048 = this.board.some(row => row.includes(2048));
+
+    if (has2048) {
       this.getMessageWin();
     }
 
@@ -494,7 +484,9 @@ class Game {
     this.addColor();
     this.addSCore();
 
-    if (this.score === 2048) {
+    const has2048 = this.board.some(row => row.includes(2048));
+
+    if (has2048) {
       this.getMessageWin();
     }
 
@@ -505,7 +497,7 @@ class Game {
   moveRight() {
     if (!this.canContinueGame()) {
       this.getMessage();
-      this.getStatus = 'playing';
+      this.status = 'finished';
 
       return;
     }
@@ -594,7 +586,9 @@ class Game {
     this.addColor();
     this.addSCore();
 
-    if (this.score === 2048) {
+    const has2048 = this.board.some(row => row.includes(2048));
+
+    if (has2048) {
       this.getMessageWin();
     }
 
@@ -687,9 +681,12 @@ class Game {
     this.addColor();
     this.addSCore();
 
-    if (this.score === 2048) {
+    const has2048 = this.board.some(row => row.includes(2048));
+
+    if (has2048) {
       this.getMessageWin();
     }
+
 
     // Оновлюємо дошку
     this.updateBoardFromDOM();
