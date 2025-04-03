@@ -32,6 +32,7 @@ class Game {
 
     messageStart.classList.remove('message-lose');
     messageStart.classList.remove('message-win');
+    messageStart.classList.remove('message');
 
     messageStart.textContent = '';
   }
@@ -99,9 +100,23 @@ class Game {
     this.status = 'playing';
 
     const button = document.querySelector('.button');
+    const messageConT = document.querySelector('.message-container');
 
-    button.textContent = 'Start';
-    button.classList.remove('restart');
+    if (button.textContent === 'Start') {
+      button.style.fontSize = '18px';
+      button.textContent = 'Restart';
+      button.classList.add('restart');
+    } else {
+      button.style.fontSize = '18px';
+      button.textContent = 'Start';
+      button.classList.remove('restart');
+      button.classList.add('start');
+
+      messageConT.children[2].textContent =
+        'Press "Start" to begin game. Good luck!';
+      messageConT.children[2].classList.add('message-start');
+      messageConT.children[2].classList.add('message');
+    }
   } // Перезапускає гру, обнуляючи рахунки.
 
   createEmptyBoard() {
@@ -263,6 +278,7 @@ class Game {
 
     messageConT.children[2].textContent = messageConT.children[0].textContent;
     messageConT.children[2].classList.add('message-lose');
+    messageConT.children[2].classList.add('message');
   }
 
   getMessageWin() {
@@ -271,6 +287,7 @@ class Game {
 
     messageConT.children[2].textContent = messageWin.textContent;
     messageConT.children[2].classList.add('message-win');
+    messageConT.children[2].classList.add('message');
   }
 
   moveUp() {
@@ -280,12 +297,6 @@ class Game {
 
       return;
     }
-
-    const button = document.querySelector('button');
-
-    button.style.fontSize = '18px';
-    button.textContent = 'Restart';
-    button.classList.add('restart');
 
     const oldBoard = JSON.stringify(this.board);
 
@@ -374,7 +385,7 @@ class Game {
     this.addColor();
     this.addSCore();
 
-    const has2048 = this.board.some(row => row.includes(2048));
+    const has2048 = this.board.some((row) => row.includes(2048));
 
     if (has2048) {
       this.getMessageWin();
@@ -384,12 +395,6 @@ class Game {
   } // Рух в верх.
 
   moveDown() {
-    const button = document.querySelector('button');
-
-    button.style.fontSize = 18 + 'px';
-    button.textContent = 'Restart';
-    button.classList.add('restart');
-
     const column1 = [];
     const column2 = [];
     const column3 = [];
@@ -484,7 +489,7 @@ class Game {
     this.addColor();
     this.addSCore();
 
-    const has2048 = this.board.some(row => row.includes(2048));
+    const has2048 = this.board.some((row) => row.includes(2048));
 
     if (has2048) {
       this.getMessageWin();
@@ -501,12 +506,6 @@ class Game {
 
       return;
     }
-
-    const button = document.querySelector('button');
-
-    button.style.fontSize = 18 + 'px';
-    button.textContent = 'Restart';
-    button.classList.add('restart');
 
     const mergeColumn = (row) => {
       const merged = row.filter((cell) => cell !== 0);
@@ -586,7 +585,7 @@ class Game {
     this.addColor();
     this.addSCore();
 
-    const has2048 = this.board.some(row => row.includes(2048));
+    const has2048 = this.board.some((row) => row.includes(2048));
 
     if (has2048) {
       this.getMessageWin();
@@ -597,12 +596,6 @@ class Game {
   } // Тільки ровні пацани йдуть туди.
 
   moveLeft() {
-    const button = document.querySelector('button');
-
-    button.style.fontSize = 18 + 'px';
-    button.textContent = 'Restart';
-    button.classList.add('restart');
-
     const mergeColumn = (row) => {
       const merged = row.filter((cell) => cell !== 0);
       const result = [];
@@ -681,12 +674,11 @@ class Game {
     this.addColor();
     this.addSCore();
 
-    const has2048 = this.board.some(row => row.includes(2048));
+    const has2048 = this.board.some((row) => row.includes(2048));
 
     if (has2048) {
       this.getMessageWin();
     }
-
 
     // Оновлюємо дошку
     this.updateBoardFromDOM();
